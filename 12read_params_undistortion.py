@@ -38,7 +38,7 @@ def display_image_windows(original_image, undistorted_image):
 if __name__ == "__main__":
     # 设定基础目录路径
     base_directory = os.path.dirname(__file__)
-    params_directory_path = os.path.join(base_directory, 'data')
+    params_directory_path = os.path.join(base_directory, 'data', 'params_files')
 
     # 构建 YAML 文件的完整路径
     camera_params_path = os.path.join(params_directory_path, 'camera_params_01.yaml')
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     print("畸变系数:\n", distCoeffs)
 
     # 定义图像文件路径
-    image_path = os.path.join(params_directory_path, 'images_cal_01/12.jpg')  # 根据实际文件名修改
+    image_path = os.path.join(base_directory, 'data', 'images_cal_01', '12.jpg')  # 根据实际文件名修改
 
     # 读取图像
     image = cv2.imread(image_path)

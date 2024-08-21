@@ -18,14 +18,25 @@ def load_camera_parameters(file_path):
 def save_camera_parameters(file_path, K, distCoeffs):
     """将修改后的相机参数保存到新的 YAML 文件"""
     data = {
-        'IntrinsicMatrix': K.tolist(),
-        'Distortion[k1,k2,k3,p1,p2]': distCoeffs.tolist()
+        'IntrinsicMatrix': [
+            K[0].tolist(),
+            K[1].tolist(),
+            K[2].tolist()
+        ],
+        ' RadialDistortion[k1, k2]': distCoeffs.tolist(),
+        ' TangentialDistortion[p1, p2]': distCoeffs.tolist()
     }
     with open(file_path, 'w') as file:
         yaml.safe_dump(data, file, default_flow_style=False)
 
 
-def process_and_save_files(input_directory, output_directory):
+if __name__ == "__main__":
+    # 设定基础目录路径
+    base_directory = os.path.dirname(__file__)
+    input_directory = os.path.join(base_directory, 'data', 'params_files')
+    output_directory = os.path.join(base_directory, 'data', 'params_files_new')
+
+    # 处理并保存所有 YAML 文件
     """处理目录下的所有 YAML 文件并保存到新的目录"""
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
@@ -34,7 +45,7 @@ def process_and_save_files(input_directory, output_directory):
         if filename.endswith('.yaml'):
             input_file_path = os.path.join(input_directory, filename)
             output_file_path = os.path.join(output_directory, filename)
-            print(f"处理文件: {input_file_path}")
+            print(f"处理文件: {filename}")
 
             try:
                 # 加载相机参数
@@ -53,7 +64,7 @@ def process_and_save_files(input_directory, output_directory):
                 distCoeffs_new = np.array([distCoeffs_1])
 
                 # 打印修改后的 distCoeffs
-                print(f"修改后的畸变系数 (file: {output_directory}):", distCoeffs_new)
+                print(f"修改后的畸变系数 (file: {output_directory}):\n", distCoeffs_new)
 
                 # 保存修改后的参数
                 save_camera_parameters(output_file_path, K, distCoeffs)
@@ -61,13 +72,3 @@ def process_and_save_files(input_directory, output_directory):
                 print(f"保存修改后的参数到: {output_file_path}\n\n\n")
             except Exception as e:
                 print(f"处理文件 {input_file_path} 时发生错误: {e}")
-
-
-if __name__ == "__main__":
-    # 设定基础目录路径
-    base_directory = os.path.dirname(__file__)
-    input_directory = os.path.join(base_directory, 'data', 'camera_params_files')
-    output_directory = os.path.join(base_directory, 'data', 'camera_params_files_new')
-
-    # 处理并保存所有 YAML 文件
-    process_and_save_files(input_directory, output_directory)

@@ -141,7 +141,7 @@ if __name__ == "__main__":
 
     # 设定基础目录路径
     base_directory = os.path.dirname(__file__)
-    params_directory_path = os.path.join(base_directory, 'data')
+    params_directory_path = os.path.join(base_directory, 'data', 'params_files')
 
     # 处理 images_cal_01 至 images_cal_09 九个文件夹
     for i in range(1, 10):
