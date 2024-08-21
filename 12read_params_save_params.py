@@ -23,8 +23,8 @@ def save_camera_parameters(file_path, K, distCoeffs):
             K[1].tolist(),
             K[2].tolist()
         ],
-        ' RadialDistortion[k1, k2]': distCoeffs.tolist(),
-        ' TangentialDistortion[p1, p2]': distCoeffs.tolist()
+        'RadialDistortion[k1, k2]': distCoeffs[0][:2].tolist(),  # Only k1 and k2
+        'TangentialDistortion[p1, p2]': distCoeffs[0][3:5].tolist()  # p1 and p2
     }
     with open(file_path, 'w') as file:
         yaml.safe_dump(data, file, default_flow_style=False)
@@ -57,17 +57,17 @@ if __name__ == "__main__":
 
                 # 确保 distCoeffs 包含至少 5 个元素
                 if len(distCoeffs[0]) < 5:
-                    raise ValueError(f"畸变系数数组长度不足: {len(distCoeffs)}，文件: {input_directory}")
+                    raise ValueError(f"畸变系数数组长度不足: {len(distCoeffs[0])}，文件: {input_file_path}")
 
                 # 去掉 k3
                 distCoeffs_1 = np.array([distCoeffs[0][0], distCoeffs[0][1], 0, distCoeffs[0][3], distCoeffs[0][4]])
                 distCoeffs_new = np.array([distCoeffs_1])
 
                 # 打印修改后的 distCoeffs
-                print(f"修改后的畸变系数 (file: {output_directory}):\n", distCoeffs_new)
+                print(f"修改后的畸变系数 (file: {output_file_path}):\n", distCoeffs_new)
 
                 # 保存修改后的参数
-                save_camera_parameters(output_file_path, K, distCoeffs)
+                save_camera_parameters(output_file_path, K, distCoeffs_new)
 
                 print(f"保存修改后的参数到: {output_file_path}\n\n\n")
             except Exception as e:
