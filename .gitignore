@@ -1,0 +1,10 @@
+build
+data
+model
+images
+lib
+doc/*
+!doc/算法模块.pdf
+!doc/原理
+.vscode
+.vs
