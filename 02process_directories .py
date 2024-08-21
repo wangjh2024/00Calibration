@@ -26,6 +26,7 @@ def process_detection_results(image_file, ret, corners, successful_images, faile
         # 进一步处理成功的图像
         img = cv2.imread(image_file)
         cv2.drawChessboardCorners(img, chessboard_size, corners, ret)
+        # 可选：显示图像和角点
         # cv2.imshow('Chessboard Corners', img)
         # cv2.waitKey(500)  # 显示角点500毫秒
     else:
@@ -40,18 +41,28 @@ def rename_files(folder_path):
     files = sorted(os.listdir(folder_path))
     for index, filename in enumerate(files):
         old_file_path = os.path.join(folder_path, filename)
-        new_file_path = os.path.join(folder_path, f"file1_{index}.jpg")
+        # new_file_name = f"file_{index + 1}.jpg"
+        new_file_name = f"{index + 1}.jpg"
+        new_file_path = os.path.join(folder_path, new_file_name)
+
+        # 如果新文件名已存在，改为仅使用数字作为文件名
+        if os.path.exists(new_file_path):
+            new_file_name = f"{index + 1}.jpg"
+            new_file_path = os.path.join(folder_path, new_file_name)
+
         os.rename(old_file_path, new_file_path)
-    print(f"文件夹 {folder_path} 文件已重命名")
+
+    num_files = len(files)
+    print(f"已重命名: {folder_path} 全部{num_files}个文件\n")
 
 
 if __name__ == "__main__":
-    # 设定起始和结束索引，目录的基础路径，以及目录数量
+    # 设定起始和结束索引，以及目录的基础路径
     start_index = 1
     end_index = 9
     base_path = "data"
 
-    # 处理所有目录
+    # 调用处理函数
     for i in range(start_index, end_index + 1):
         directory = os.path.join(base_path, f"images_cal_{i:02d}/")  # 生成目录路径
         if os.path.isdir(directory):  # 检查目录是否存在
@@ -69,8 +80,8 @@ if __name__ == "__main__":
                 process_detection_results(image_file, ret, corners, successful_images, failed_images)
 
             # 打印处理结果
-            print(f"成功检测的图像: {successful_images}")
-            print(f"失败检测的图像: {failed_images}")
+            print(f"成功检测到角点的图像数量: {len(successful_images)}")
+            print(f"未检测到角点的图像数量:  {len(failed_images)}")
 
             # 重命名文件
             rename_files(directory)

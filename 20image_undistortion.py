@@ -10,12 +10,14 @@ K = np.array([[720.4754, 0, 353.6338],
 distCoeffs = np.array([-0.5154, 0.2236, 0.0252, -0.0086])
 
 # 图像文件路径
-IMAGE_PATH = r"E:\PycharmProjects\03CameraCalibration\images_00\cal_1\62.jpg"
+IMAGE_PATH = r"data\images_cal_01\12.jpg"
+
 
 def on_mouse(event, x, y, flags, param):
     """处理鼠标点击事件：输出点击位置"""
     if event == cv2.EVENT_LBUTTONDOWN:
         print(f"点击位置: {(x, y)}")
+
 
 def display_image_windows(original_image, undistorted_image):
     """创建窗口并显示图像"""
@@ -28,6 +30,7 @@ def display_image_windows(original_image, undistorted_image):
     # 显示图像
     cv2.imshow("Original Image", original_image)
     cv2.imshow("Undistorted Image", undistorted_image)
+
 
 def main():
     # 读取图像
@@ -46,6 +49,7 @@ def main():
     # 等待用户按键并关闭所有窗口
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
 
 if __name__ == "__main__":
     main()

@@ -16,6 +16,7 @@ def clear_folder(folder_path):
 
 # step 2 图像显示 采集数据
 def initialize_camera(camera_index):
+
     """初始化摄像头并返回对象"""
     cap = cv2.VideoCapture(camera_index)
     if not cap.isOpened():

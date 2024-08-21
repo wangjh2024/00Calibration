@@ -1,10 +1,10 @@
+import logging
+import os
+
 import cv2
 import numpy as np
-import os
-from tqdm import tqdm
-import logging
-
 import yaml
+from tqdm import tqdm
 
 
 def save_camera_parameters(camera_matrix, dist_coeffs, filename):
@@ -125,13 +125,12 @@ def process_camera_params(input_file_path, output_file_path):
         print(f"处理文件时出错: {e}")
 
 
-def main():
-
+if __name__ == "__main__":
     global output_yaml
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
     # step 1 初始化
-    index = '07'    # 修改索引值
+    index = '01'  # 修改索引值
     base_directory = os.path.dirname(__file__)
     image_directory_path = os.path.join(base_directory, 'data', f'images_cal_{index}')
     params_directory_path = os.path.join(base_directory, 'data')
@@ -139,7 +138,6 @@ def main():
     # step 2 读数据并开始标定
     if not os.path.isdir(image_directory_path):
         logging.error(f"图像目录 '{image_directory_path}' 不存在。")
-        return
     camera_matrix, dist_coeffs, r_vecs, t_vecs = calibrate_camera_from_images(image_directory_path)
 
     # step 3 数据输出
@@ -149,11 +147,3 @@ def main():
         logging.info(f"相机参数已成功保存到 '{output_yaml}'")
     else:
         logging.error("相机内参标定失败，无法保存标定结果。")
-
-    # step 4 按照标准格式输出
-    output_yaml2 = os.path.join(params_directory_path, f'camera_params_{index}2.yaml')
-    process_camera_params(output_yaml, output_yaml2)
-
-
-if __name__ == "__main__":
-    main()
