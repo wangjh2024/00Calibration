@@ -36,19 +36,20 @@ def process_detection_results(image_file, ret, corners, successful_images, faile
     # print(f"图像 {image_file} 检测结果: {'成功' if ret else '失败'}")
 
 
+def process_and_remove_failed_images(image_file, ret):
+    """根据角点检测结果处理图像，删除检测失败的图像"""
+    if not ret:
+        os.remove(image_file)
+        print(f"已删除文件: {image_file}")
+
+
 def rename_files(folder_path):
     """按顺序重命名文件夹中的所有文件"""
     files = sorted(os.listdir(folder_path))
     for index, filename in enumerate(files):
         old_file_path = os.path.join(folder_path, filename)
-        # new_file_name = f"file_{index + 1}.jpg"
         new_file_name = f"{index + 1}.jpg"
         new_file_path = os.path.join(folder_path, new_file_name)
-
-        # 如果新文件名已存在，改为仅使用数字作为文件名
-        if os.path.exists(new_file_path):
-            new_file_name = f"{index + 1}.jpg"
-            new_file_path = os.path.join(folder_path, new_file_name)
 
         os.rename(old_file_path, new_file_path)
 
@@ -70,18 +71,16 @@ if __name__ == "__main__":
 
             # 读取图像
             image_files = read_images_from_directory(directory)
-            successful_images = []
-            failed_images = []
+            print(f"检测前全部图像数量: {len(image_files)}")
 
-            # 检测角点并处理结果
+            # 检测角点并根据结果处理图像
             for image_file in image_files:
                 img = cv2.imread(image_file)
                 ret, corners = detect_chessboard_corners(img, (4, 3))
-                process_detection_results(image_file, ret, corners, successful_images, failed_images)
+                process_and_remove_failed_images(image_file, ret)
 
             # 打印处理结果
-            print(f"成功检测到角点的图像数量: {len(successful_images)}")
-            print(f"未检测到角点的图像数量:  {len(failed_images)}")
+            print(f"检测后全部图像数量:  {len(image_files)}")
 
             # 重命名文件
             rename_files(directory)
