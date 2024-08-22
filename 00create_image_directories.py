@@ -1,3 +1,5 @@
+"""
+    在指定的基础目录下，创建从 `images_cal_01` 到 `images_cal_09` 的文件夹。"""
 import os
 
 
@@ -18,7 +20,6 @@ def create_image_directories(base_dir, start=1, end=9):
 
 
 if __name__ == "__main__":
-
     # 获取当前脚本所在目录
     base_directory = os.path.dirname(__file__)
 
