@@ -1,3 +1,5 @@
+"""
+    在指定的基础目录下，创建从 `images_cal_01` 到 `images_cal_09` 的文件夹。"""
 import os
 
 import cv2
