@@ -21,20 +21,20 @@ def save_camera_parameters(file_path, K, distCoeffs):
         'IntrinsicMatrix_sign': [
             ['fx', '0', 'x0'],
             ['0', 'fy', 'y0'],
-            ['0', '0', '1']],
+            ['0', '0', '1']
+        ],
         'IntrinsicMatrix': [
-            # [K[0][0].tolist(), K[0][1].tolist(), K[0][2].tolist()],
-            K[0].tolist().
+            K[0].tolist(),
             K[1].tolist(),
-            K[2].tolist()],
-        'IntrinsicMatrix_temp':
-            ['[fx,  0,  x0]',
-             '[0,  fy,  y0]',
-             '[0,   0,  1 ]'],
+            K[2].tolist()
+        ],
+        'IntrinsicMatrix_temp': [
+            '[fx,  0,  x0]',
+            '[0,  fy,  y0]',
+            '[0,   0,  1 ]'
+        ],
 
         'RadialDistortion[k1, k2]': distCoeffs[0][:2].tolist(),  # Only k1 and k2
-        # 'RadialDistort_k1': distCoeffs[0][0].tolist(),  # Only k1 and k2
-        # 'RadialDistort_k2': distCoeffs[0][1].tolist(),  # Only k1 and k2
 
         'TangentialDistortion[p1, p2]': distCoeffs[0][3:5].tolist()  # p1 and p2
     }
