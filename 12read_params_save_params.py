@@ -18,12 +18,24 @@ def load_camera_parameters(file_path):
 def save_camera_parameters(file_path, K, distCoeffs):
     """将修改后的相机参数保存到新的 YAML 文件"""
     data = {
+        'IntrinsicMatrix_sign': [
+            ['fx', '0', 'x0'],
+            ['0', 'fy', 'y0'],
+            ['0', '0', '1']],
         'IntrinsicMatrix': [
-            K[0].tolist(),
+            # [K[0][0].tolist(), K[0][1].tolist(), K[0][2].tolist()],
+            K[0].tolist().
             K[1].tolist(),
-            K[2].tolist()
-        ],
+            K[2].tolist()],
+        'IntrinsicMatrix_temp':
+            ['[fx,  0,  x0]',
+             '[0,  fy,  y0]',
+             '[0,   0,  1 ]'],
+
         'RadialDistortion[k1, k2]': distCoeffs[0][:2].tolist(),  # Only k1 and k2
+        # 'RadialDistort_k1': distCoeffs[0][0].tolist(),  # Only k1 and k2
+        # 'RadialDistort_k2': distCoeffs[0][1].tolist(),  # Only k1 and k2
+
         'TangentialDistortion[p1, p2]': distCoeffs[0][3:5].tolist()  # p1 and p2
     }
     with open(file_path, 'w') as file:
@@ -68,7 +80,6 @@ if __name__ == "__main__":
 
                 # 保存修改后的参数
                 save_camera_parameters(output_file_path, K, distCoeffs_new)
-
                 print(f"保存修改后的参数到: {output_file_path}\n\n\n")
             except Exception as e:
                 print(f"处理文件 {input_file_path} 时发生错误: {e}")
