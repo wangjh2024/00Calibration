@@ -34,7 +34,7 @@ if __name__ == "__main__":
     rotation_matrix = create_rotation_matrix(rotation_angles)
     print("旋转矩阵 R=\n{}".format(rotation_matrix))
 
-    # 定义需要变换的点（单位：单位）
+    # 定义需要变换的点（单位：）
     point = np.array([-874, 43, 1510])
 
     # 进行旋转和平移变换
