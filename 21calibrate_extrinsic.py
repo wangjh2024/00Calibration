@@ -1,16 +1,9 @@
+import os
+
 import cv2
 import numpy as np
+import yaml
 from scipy.spatial.transform import Rotation
-
-# 定义相机的内参矩阵 K 和畸变系数 D
-K = np.array([[720.4387, 0, 319.0484],  # 焦距 fx 和主点 cx
-              [0, 719.4163, 204.2231],  # 焦距 fy 和主点 cy
-              [0, 0, 1]])  # 齐次坐标系的第三行
-D = np.array([-0.5124, 0.1789, 0.0118, -0.0016])  # 畸变系数 [k1, k2, p1, p2]
-
-# 标定板相对于法兰盘的平移向量 Tfb 和旋转矩阵 Rfb
-Tfb = np.array([-47, -57, 380])  # 标定板相对于法兰盘的平移向量
-Rfb = Rotation.from_euler('xyz', [0, 0, 0], degrees=True).as_matrix()  # 欧拉角转旋转矩阵
 
 
 def calculate_transformation(corners, board_size, board_scale):
@@ -26,7 +19,7 @@ def calculate_transformation(corners, board_size, board_scale):
     obj_points[:, :2] = np.mgrid[0:board_size[0], 0:board_size[1]].T.reshape(-1, 2) * board_scale
 
     # 使用PnP算法求解相机位姿 (旋转向量和位移向量)
-    _, r_vec, t_vec = cv2.solvePnP(obj_points, corners, K, D)
+    _, r_vec, t_vec = cv2.solvePnP(obj_points, corners, K, Distoreffs)
 
     # 将旋转向量转换为旋转矩阵 Rcb (标定板相对于相机的旋转矩阵)
     Rcb, _ = cv2.Rodrigues(r_vec)
@@ -54,17 +47,49 @@ def display_corners(frame, corners, board_size):
     cv2.circle(frame, center, 5, (0, 0, 255), -1)  # 绘制红色圆圈
 
     # 去除图像畸变
-    undistorted_frame = cv2.undistort(frame, K, D)
+    undistorted_frame = cv2.undistort(frame, K, Distoreffs)
 
     # 显示去畸变后的图像
     cv2.imshow("frame", undistorted_frame)
 
 
-def main():
+def load_camera_parameters(file_path):
+    """从 YAML 文件中加载相机参数"""
+    with open(file_path, 'r') as file:
+        data = yaml.safe_load(file)
+
+    # 提取内参矩阵和畸变系数
+    K = np.array(data['IntrinsicMatrix'])
+    Distoreffs_0 = np.array(data['Distortion[k1,k2,k3,p1,p2]'])
+
+    Distoreffs = np.array([Distoreffs_0[0][0], Distoreffs_0[0][1], 0, Distoreffs_0[0][3], Distoreffs_0[0][4]])
+
+    return K, Distoreffs
+
+
+if __name__ == "__main__":
     # 打开默认摄像头
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     board_size = (4, 3)  # 棋盘格的大小
-    board_scale = 30  # 棋盘格每个方格的边长
+    board_scale = 24  # 棋盘格每个方格的边长
+
+    base_directory = os.path.dirname(__file__)
+    input_directory = os.path.join(base_directory, 'data', 'params_files', 'camera_params_08.yaml')
+    K, Distoreffs = load_camera_parameters(input_directory)
+
+    # 打印内参矩阵和畸变系数
+    print("内参矩阵:\n", K)
+    print("畸变系数:\n\n\n", Distoreffs)
+
+    # 定义相机的内参矩阵 K 和畸变系数 D
+    # K = np.array([[720.4387, 0, 319.0484],  # 焦距 fx 和主点 cx
+    #               [0, 719.4163, 204.2231],  # 焦距 fy 和主点 cy
+    #               [0, 0, 1]])  # 齐次坐标系的第三行
+    # Distoreffs = np.array([-0.5124, 0.1789, 0.0118, -0.0016])  # 畸变系数 [k1, k2, p1, p2]
+
+    # 标定板相对于法兰盘的平移向量 Tfb 和旋转矩阵 Rfb
+    Tfb = np.array([-47, -57, 380])  # 标定板相对于法兰盘的平移向量
+    Rfb = Rotation.from_euler('xyz', [0, 0, 0], degrees=True).as_matrix()  # 欧拉角转旋转矩阵
 
     while True:
         ret, frame = cap.read()  # 从摄像头读取一帧图像
@@ -96,7 +121,3 @@ def main():
     # 释放摄像头并关闭所有窗口
     cap.release()
     cv2.destroyAllWindows()
-
-
-if __name__ == "__main__":
-    main()  # 运行主函数
