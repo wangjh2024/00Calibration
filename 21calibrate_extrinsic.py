@@ -56,7 +56,7 @@ def load_camera_parameters(file_path):
 
 
 if __name__ == "__main__":
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(0)
     board_size = (4, 3)
     board_scale = 24
 

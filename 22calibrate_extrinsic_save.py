@@ -55,6 +55,19 @@ def load_camera_parameters(file_path):
     return K, Distoreffs
 
 
+def save_parameters(file_path, K, Distoreffs, Rfc, Tfc):
+    """将相机参数和变换矩阵保存到 YAML 文件"""
+    data = {
+        'IntrinsicMatrix': K.tolist(),
+        'Distortion': Distoreffs.tolist(),
+        'Rotation': Rotation.from_matrix(Rfc).as_euler('xyz', degrees=True).tolist(),
+        'Translation': Tfc.tolist()
+    }
+
+    with open(file_path, 'w') as file:
+        yaml.dump(data, file)
+
+
 if __name__ == "__main__":
     cap = cv2.VideoCapture(0)
     board_size = (4, 3)
@@ -82,6 +95,10 @@ if __name__ == "__main__":
             Rfc, Tfc = calculate_transformation(corners.squeeze(), board_size, board_scale)
             print(f"Rotation (Euler angles): {Rotation.from_matrix(Rfc).as_euler('xyz', degrees=True)}")
             print(f"Translation: {Tfc}")
+
+            # Save the parameters
+            output_directory = os.path.join(base_directory, 'data', 'params_files_output', 'camera_params_08.yaml')
+            save_parameters(output_directory, K, Distoreffs, Rfc, Tfc)
         else:
             print("未检测到棋盘角点。")
 
