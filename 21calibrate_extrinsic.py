@@ -76,7 +76,7 @@ if __name__ == "__main__":
         flag, corners = cv2.findChessboardCorners(gray, board_size)
 
         if flag:
-            criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+            criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)  # 亚像素点检测 迭代30次 精度为0.001
             corners = cv2.cornerSubPix(gray, corners, (3, 3), (-1, -1), criteria)
             display_corners(frame, corners, board_size)
             Rfc, Tfc = calculate_transformation(corners.squeeze(), board_size, board_scale)
