@@ -80,7 +80,7 @@ if __name__ == "__main__":
     print("内参矩阵:\n", K)
     print("畸变系数:\n", Distoreffs, '\n')
 
-    Tfb = np.array([-47, -57, 380])
+    Tfb = np.array([-47, -57, 420])
     Rfb = Rotation.from_euler('xyz', [0, 0, 0], degrees=True).as_matrix()
 
     ret, frame = cap.read()  # 从摄像头读取一帧图像
