@@ -26,6 +26,9 @@ def save_camera_parameters(camera_matrix, dist_coeffs, filename):
         "Distortion[k1,k2,k3,p1,p2]": dist_coeffs.tolist(),  # 前三个作为径向畸变系数
     }
 
+    # 确保目录存在
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+
     # 保存到 YAML 文件
     with open(filename, 'w') as f:
         yaml.dump(parameters, f, default_flow_style=False, sort_keys=False)
@@ -146,7 +149,7 @@ if __name__ == "__main__":
     # 处理 images_cal_01 至 images_cal_09 九个文件夹
     for i in range(1, 10):
         index = f"{i:02d}"  # 生成索引 01, 02, ..., 09
-        image_directory_path = os.path.join(base_directory, 'data', f'images_cal_{index}')
+        image_directory_path = os.path.join(base_directory, 'data', 'capture_images', f'images_cal_{index}')
 
         # step 1 读数据并开始标定
         if not os.path.isdir(image_directory_path):

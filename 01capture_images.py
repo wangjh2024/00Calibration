@@ -45,10 +45,10 @@ def cleanup(cap):
 
 if __name__ == "__main__":
     # 图像保存路径
-    save_path = "data/images_cal_10/"  # 定义图像保存路径
+    save_path = "data/capture_images/images_cal_10/"  # 定义图像保存路径
 
     # 初始化摄像头
-    camera_index = 1  # 定义摄像头索引
+    camera_index = 0  # 定义摄像头索引
     cap = initialize_camera(camera_index)  # 调用函数初始化摄像头
 
     if cap:  # 如果摄像头成功初始化
