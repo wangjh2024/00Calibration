@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     # 定义图像文件夹路径
     images_directory_name = f'images_cal_0{index}'
-    images_directory_path = os.path.join(base_directory, 'data', images_directory_name)
+    images_directory_path = os.path.join(base_directory, 'data', 'capture_images', images_directory_name)
 
     # 遍历文件夹中的全部图片
     for image_file in os.listdir(images_directory_path):

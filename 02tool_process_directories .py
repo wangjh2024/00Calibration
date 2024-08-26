@@ -48,7 +48,9 @@ def rename_files(folder_path):
     files = sorted(os.listdir(folder_path))
     for index, filename in enumerate(files):
         old_file_path = os.path.join(folder_path, filename)
-        new_file_name = f"{index + 1}.jpg"
+        # ###########################
+        new_file_name = f"{index + 1}.jpg"  ##################
+        # ###########################
         new_file_path = os.path.join(folder_path, new_file_name)
 
         os.rename(old_file_path, new_file_path)
@@ -61,7 +63,7 @@ if __name__ == "__main__":
     # 设定起始和结束索引，以及目录的基础路径
     start_index = 1
     end_index = 9
-    base_path = "data"
+    base_path = "data/capture_images/"
 
     # 调用处理函数
     for i in range(start_index, end_index + 1):

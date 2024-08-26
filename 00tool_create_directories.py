@@ -14,7 +14,7 @@ def create_image_directories(base_dir, start=1, end=9):
     """
     for i in range(start, end + 1):
         index = f'{i:02}'  # 将数字格式化为两位数，例如 '01', '02', ..., '09'
-        image_directory_path = os.path.join(base_dir, 'data', f'images_cal_{index}')
+        image_directory_path = os.path.join(base_dir, 'data', 'capture_images', f'images_cal_{index}')
         os.makedirs(image_directory_path, exist_ok=True)
         print(f"目录 {image_directory_path} 已创建。")
 
