@@ -116,7 +116,7 @@ def save_parameters(file_path, K, Distoreffs, Rfc_avg, Tfc_avg):
 
 if __name__ == "__main__":
     # 手动设置序号，取值范围01-09
-    sequence_number = "08"  # 你可以将其更改为"01", "02", ..., "09"
+    sequence_number = "07"  # 你可以将其更改为"01", "02", ..., "09"
 
     board_size = (4, 3)  # 棋盘格的大小 (列数, 行数)
     board_scale = 24  # 棋盘格的实际尺寸 (毫米)
