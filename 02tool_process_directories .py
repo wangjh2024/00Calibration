@@ -49,7 +49,7 @@ def rename_files(folder_path):
     for index, filename in enumerate(files):
         old_file_path = os.path.join(folder_path, filename)
         # ###########################
-        new_file_name = f"{index + 1}.jpg"  ##################
+        new_file_name = f"0{index + 1}.jpg"  ##################
         # ###########################
         new_file_path = os.path.join(folder_path, new_file_name)
 

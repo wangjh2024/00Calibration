@@ -52,7 +52,7 @@ if __name__ == "__main__":
         h, w = frame.shape[:2]
         # 角点检测
         board_size = (4, 3)
-        board_scale = 30
+        board_scale = 24
         flag, corners = cv2.findChessboardCorners(frame, board_size)
         if not flag:
             continue
