@@ -116,7 +116,7 @@ def save_parameters(file_path, K, Distoreffs, Rfc_avg, Tfc_avg):
 
 if __name__ == "__main__":
     # 手动设置序号，取值范围01-09
-    sequence_number = "09"  # 你可以将其更改为"01", "02", ..., "09"
+    sequence_number = "04"  # 你可以将其更改为"01", "02", ..., "09"
 
     board_size = (4, 3)  # 棋盘格的大小 (列数, 行数)
     board_scale = 24  # 棋盘格的实际尺寸 (毫米)
@@ -133,7 +133,7 @@ if __name__ == "__main__":
     print("畸变系数:\n", Distoreffs, '\n')
 
     # 定义法兰盘到相机的变换（假设已知）
-    Tfb = np.array([-24, -36, 495])  # 法兰盘到相机的平移向量
+    Tfb = np.array([-24, -36, 448])  # 法兰盘到相机的平移向量
     Rfb = Rotation.from_euler('xyz', [0, 0, 0], degrees=True).as_matrix()  # 法兰盘到相机的旋转矩阵（单位矩阵）
 
     # 初始化旋转矩阵和平移向量的累积和
@@ -153,11 +153,9 @@ if __name__ == "__main__":
                 if flag:
                     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
                     corners = cv2.cornerSubPix(gray, corners, (3, 3), (-1, -1), criteria)
-                    display_corners(frame, corners, board_size)
-
                     image_path = os.path.join(save_directory, f'image_{i + 1}.png')
                     cv2.imwrite(image_path, frame)
-
+                    display_corners(frame, corners, board_size)
                     # 计算相机相对于法兰盘的旋转矩阵和平移向量
                     Rfc, Tfc = calculate_transformation(corners.squeeze(), board_size, board_scale)
                     Rfc_sum += Rfc
